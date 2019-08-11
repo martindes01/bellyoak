@@ -1,0 +1,40 @@
+{
+  "name": "web_bellyoak",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martindes01/web_bellyoak.git"
+  },
+  "keywords": [],
+  "author": "martindes01",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martindes01/web_bellyoak/issues"
+  },
+  "homepage": "https://github.com/martindes01/web_bellyoak#readme",
+  "dependencies": {
+    "material-components-web": "^3.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "autoprefixer": "^9.6.1",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "extract-loader": "^3.1.0",
+    "file-loader": "^4.2.0",
+    "node-sass": "^4.12.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.2.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
+  }
+}
