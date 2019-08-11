@@ -1,0 +1,14 @@
+# Django
+
+__pycache__/
+media/
+
+*.pyc
+
+.coverage
+db.sqlite3
+
+
+# Node
+
+node_modules/
