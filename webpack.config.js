@@ -4,8 +4,8 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: [
-    './static/css/app.scss',
-    './static/js/app.js',
+    './src/app.js',
+    './src/app.scss',
   ],
   output: {
     path: path.resolve('./static/js'),
@@ -13,6 +13,15 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        query: {
+          presets: [
+            '@babel/preset-env',
+          ],
+        },
+      },
       {
         test: /\.scss$/,
         use: [
@@ -45,15 +54,6 @@ module.exports = {
             },
           },
         ],
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            '@babel/preset-env',
-          ],
-        },
       },
     ],
   },
