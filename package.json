@@ -1,5 +1,5 @@
 {
-  "name": "web_bellyoak",
+  "name": "bellyoak",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martindes01/web_bellyoak.git"
+    "url": "git+https://github.com/martindes01/bellyoak.git"
   },
   "keywords": [],
   "author": "martindes01",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/martindes01/web_bellyoak/issues"
+    "url": "https://github.com/martindes01/bellyoak/issues"
   },
-  "homepage": "https://github.com/martindes01/web_bellyoak#readme",
+  "homepage": "https://github.com/martindes01/bellyoak#readme",
   "dependencies": {
     "material-components-web": "^3.1.0"
   },
