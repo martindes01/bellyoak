@@ -1,5 +1,5 @@
 """
-WSGI config for web_bellyoak project.
+WSGI config for bellyoak_project project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_bellyoak.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bellyoak_project.settings')
 
 application = get_wsgi_application()
