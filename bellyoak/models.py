@@ -1,6 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+from decimal import Decimal
+
 # Research integer and decimal validation
 
 class Recipe(models.Model):
@@ -74,15 +76,15 @@ class Ingredient(models.Model):
 
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
     name = models.CharField(max_length=255)
-    quantity = models.DecimalField(max_digits=10, decimal_places=3)
+    quantity = models.DecimalField(max_digits=10, decimal_places=3, default=Decimal())
     unit = models.CharField(max_length=255, choices=UNITS, default=NONE)
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.quantity < 0:
-            self.quantity = -self.quantity
+        if float(self.quantity) < 0:
+            self.quantity = Decimal('-' + str(self.quantity))
 
         super().save(*args, **kwargs)
 
@@ -95,13 +97,13 @@ class Instruction(models.Model):
         return self.index
 
     def save(self, *args, **kwargs):
-        # Set index 1 higher than previous instruction for this recipe, or set index to 1 if first instruction
+        # Set index 1 higher than previous instruction for this recipe, or set index to 1 if no previous instruction
         # Unsaved instruction has default index of 0
         if self.index == 0:
             try:
                 last_instruction = Instruction.objects.filter(recipe__exact=self.recipe).order_by('-index')[0]
                 self.index = last_instruction.index + 1
-            except Instruction.DoesNotExist:
+            except IndexError:
                 self.index = 1
 
         super().save(*args, **kwargs)
