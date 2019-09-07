@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from bellyoak.models import Ingredient, Instruction, Recipe
+
+admin.site.register(Ingredient)
+admin.site.register(Instruction)
+admin.site.register(Recipe)
