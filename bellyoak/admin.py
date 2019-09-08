@@ -15,7 +15,6 @@ class IngredientAdmin(admin.ModelAdmin):
 class InstructionAdmin(admin.ModelAdmin):
     list_display = (
         'recipe',
-        'index',
         'text',
     )
 

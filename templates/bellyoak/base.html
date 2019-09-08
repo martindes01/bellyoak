@@ -17,6 +17,12 @@
 <body>
   {% block body %}
   {% endblock %}
+  <hr>
+  <a href="{% url 'index' %}">Home</a>
+  <a href="{% url 'add_recipe' %}">New recipe</a>
+  <a href="{% url 'list_recipes' %}">Recipes</a>
+  <a href="{% url 'list_users' %}">Users</a>
+  <a href="{% url 'about' %}">About BellyOak</a>
 </body>
 
 </html>

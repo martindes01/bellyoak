@@ -3,9 +3,62 @@
 {% load staticfiles %}
 
 {% block title %}
-{{ title }}
+{{ recipe.title }}
 {% endblock %}
 
 {% block body %}
-{{ message }}
+{% if recipe %}
+<h1>{{ recipe.title }}</h1>
+<div>
+  <!-- Following if statements repeated in index and recipes -->
+  <!-- Keep it DRY -->
+  {% if recipe.views == 1 %}
+  ({{ recipe.views }} view)
+  {% else %}
+  ({{ recipe.views }} views)
+  {% endif %}
+  {% if recipe.likes == 1 %}
+  ({{ recipe.likes }} like)
+  {% else %}
+  ({{ recipe.likes }} likes)
+  {% endif %}
+  {% if recipe.diet != no_diet %}
+  ({{ recipe.get_diet_display }})
+  {% endif %}
+</div>
+
+<h2>Ingredients</h2>
+<div>
+  <ul>
+    {% for ingredient in ingredients %}
+    <li>
+      {{ ingredient.name }}, {{ ingredient.quantity }}
+      {% if ingredient.unit != no_unit %}
+      <abbr title="{{ ingredient.get_unit_name }}">{{ ingredient.get_unit_symbol }}</abbr>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<h2>Method</h2>
+<div>
+  <ol>
+    {% for instruction in instructions %}
+    <li>
+      <!-- {{ forloop.counter }}. {{ instruction.text }} -->
+      {{ instruction.text }}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+{% else %}
+<p>
+  The specified recipe does not exist! Why not
+  <span>
+    <a href="{% url 'add_recipe' %}">add one of your own</a>?
+  </span>
+</p>
+{% endif %}
+
 {% endblock %}
