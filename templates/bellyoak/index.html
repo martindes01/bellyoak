@@ -3,5 +3,43 @@
 {% load staticfiles %}
 
 {% block body %}
-{{ message }}
+<h1>Welcome to BellyOak</h1>
+<p>The home away from home of student grub</p>
+
+<h2>Popular recipes</h2>
+<div>
+  <!-- Following if statement repeated in recipes.html -->
+  <!-- Keep it DRY -->
+  {% if recipes %}
+  <ul>
+    {% for recipe in recipes %}
+    <li>
+      <a href="{% url 'show_recipe' recipe.id %}">{{ recipe.title }}</a>
+      <!-- Following if statements repeated in recipe and recipes -->
+      <!-- Keep it DRY -->
+      {% if recipe.views == 1 %}
+      ({{ recipe.views }} view)
+      {% else %}
+      ({{ recipe.views }} views)
+      {% endif %}
+      {% if recipe.likes == 1 %}
+      ({{ recipe.likes }} like)
+      {% else %}
+      ({{ recipe.likes }} likes)
+      {% endif %}
+      {% if recipe.diet != no_diet %}
+      ({{ recipe.get_diet_display }})
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>
+    We currently have no recipes listed. Why not
+    <span>
+      <a href="{% url 'add_recipe' %}">add one of your own</a>?
+    </span>
+  </p>
+  {% endif %}
+</div>
 {% endblock %}
