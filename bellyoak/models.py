@@ -3,97 +3,23 @@ from django.template.defaultfilters import slugify
 
 from decimal import Decimal
 
-
 # TODO
 # Research integer and decimal validation
 # Add length, more units, imperial
 # Add course, cuisine, publish/update dates, tags
 
-
-# Choice classes
-
-class Diet():
-    NONE = 'none'
-    VEGETARIAN = 'vegetarian'
-    VEGAN = 'vegan'
-
-    DIET_CHOICES = [
-        (NONE, 'None'),
-        (VEGETARIAN, 'Vegetarian'),
-        (VEGAN, 'Vegan'),
-    ]
-
-class Unit():
-    SYMBOL_KEY = 'symbol'
-    NAME_KEY = 'name'
-
-    NONE = 'none'
-    GRAM = 'gram'
-    KILOGRAM = 'kilogram'
-    MILLILITRE = 'millilitre'
-    LITRE = 'litre'
-    TEASPOON = 'teaspoon'
-    TABLESPOON = 'tablespoon'
-    CUP = 'cup'
-    PINT = 'pint'
-
-    units = {
-        GRAM: {
-            SYMBOL_KEY: 'g',
-            NAME_KEY: 'grams',
-        },
-        KILOGRAM: {
-            SYMBOL_KEY: 'kg',
-            NAME_KEY: 'kilograms',
-        },
-        MILLILITRE: {
-            SYMBOL_KEY: 'ml',
-            NAME_KEY: 'millilitres',
-        },
-        LITRE: {
-            SYMBOL_KEY: 'l',
-            NAME_KEY: 'litres',
-        },
-        TEASPOON: {
-            SYMBOL_KEY: 'tsp',
-            NAME_KEY: 'teaspoons',
-        },
-        TABLESPOON: {
-            SYMBOL_KEY: 'tbsp',
-            NAME_KEY: 'tablespoons',
-        },
-        CUP: {
-            SYMBOL_KEY: 'cup',
-            NAME_KEY: 'cups',
-        },
-        PINT: {
-            SYMBOL_KEY: 'pt.',
-            NAME_KEY: 'pints',
-        },
-    }
-
-    UNIT_CHOICES = [
-        (NONE, 'None'),
-        ('Mass', (
-                (GRAM, units[GRAM][SYMBOL_KEY] + ' (' + units[GRAM][NAME_KEY] + ')'),
-                (KILOGRAM, units[KILOGRAM][SYMBOL_KEY] + ' (' + units[KILOGRAM][NAME_KEY] + ')'),
-            )
-        ),
-        ('Volume', (
-                (MILLILITRE, units[MILLILITRE][SYMBOL_KEY] + ' (' + units[MILLILITRE][NAME_KEY] + ')'),
-                (LITRE, units[LITRE][SYMBOL_KEY] + ' (' + units[LITRE][NAME_KEY] + ')'),
-                (TEASPOON, units[TEASPOON][SYMBOL_KEY] + ' (' + units[TEASPOON][NAME_KEY] + ')'),
-                (TABLESPOON, units[TABLESPOON][SYMBOL_KEY] + ' (' + units[TABLESPOON][NAME_KEY] + ')'),
-                (CUP, units[CUP][SYMBOL_KEY] + ' (' + units[CUP][NAME_KEY] + ')'),
-                (PINT, units[PINT][SYMBOL_KEY] + ' (' + units[PINT][NAME_KEY] + ')'),
-            )
-        ),
-    ]
-
-
-# Model classes
-
 class Recipe(models.Model):
+    class Diet():
+        NONE = 'none'
+        VEGETARIAN = 'vegetarian'
+        VEGAN = 'vegan'
+
+        DIET_CHOICES = [
+            (NONE, 'None'),
+            (VEGETARIAN, 'Vegetarian'),
+            (VEGAN, 'Vegan'),
+        ]
+
     title = models.CharField(max_length=255)
     # image = models.ImageField(upload_to='recipe_images', blank=True)
     description = models.TextField(blank=True)
@@ -108,7 +34,10 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):        
+    def save(self, *args, **kwargs):
+        if self.servings < 1:
+            self.servings = 1
+
         if self.likes < 0:
             self.likes = 0
 
@@ -120,6 +49,73 @@ class Recipe(models.Model):
         super().save(*args, **kwargs)
 
 class Ingredient(models.Model):
+    class Unit():
+        SYMBOL_KEY = 'symbol'
+        NAME_KEY = 'name'
+
+        NONE = 'none'
+        GRAM = 'gram'
+        KILOGRAM = 'kilogram'
+        MILLILITRE = 'millilitre'
+        LITRE = 'litre'
+        TEASPOON = 'teaspoon'
+        TABLESPOON = 'tablespoon'
+        CUP = 'cup'
+        PINT = 'pint'
+
+        units = {
+            GRAM: {
+                SYMBOL_KEY: 'g',
+                NAME_KEY: 'grams',
+            },
+            KILOGRAM: {
+                SYMBOL_KEY: 'kg',
+                NAME_KEY: 'kilograms',
+            },
+            MILLILITRE: {
+                SYMBOL_KEY: 'ml',
+                NAME_KEY: 'millilitres',
+            },
+            LITRE: {
+                SYMBOL_KEY: 'l',
+                NAME_KEY: 'litres',
+            },
+            TEASPOON: {
+                SYMBOL_KEY: 'tsp',
+                NAME_KEY: 'teaspoons',
+            },
+            TABLESPOON: {
+                SYMBOL_KEY: 'tbsp',
+                NAME_KEY: 'tablespoons',
+            },
+            CUP: {
+                SYMBOL_KEY: 'cup',
+                NAME_KEY: 'cups',
+            },
+            PINT: {
+                SYMBOL_KEY: 'pt.',
+                NAME_KEY: 'pints',
+            },
+        }
+
+        UNIT_CHOICES = [
+            (NONE, 'None'),
+            ('Mass', (
+                    (GRAM, units[GRAM][SYMBOL_KEY] + ' (' + units[GRAM][NAME_KEY] + ')'),
+                    (KILOGRAM, units[KILOGRAM][SYMBOL_KEY] + ' (' + units[KILOGRAM][NAME_KEY] + ')'),
+                )
+            ),
+            ('Volume', (
+                    (MILLILITRE, units[MILLILITRE][SYMBOL_KEY] + ' (' + units[MILLILITRE][NAME_KEY] + ')'),
+                    (LITRE, units[LITRE][SYMBOL_KEY] + ' (' + units[LITRE][NAME_KEY] + ')'),
+                    (TEASPOON, units[TEASPOON][SYMBOL_KEY] + ' (' + units[TEASPOON][NAME_KEY] + ')'),
+                    (TABLESPOON, units[TABLESPOON][SYMBOL_KEY] + ' (' + units[TABLESPOON][NAME_KEY] + ')'),
+                    (CUP, units[CUP][SYMBOL_KEY] + ' (' + units[CUP][NAME_KEY] + ')'),
+                    (PINT, units[PINT][SYMBOL_KEY] + ' (' + units[PINT][NAME_KEY] + ')'),
+                )
+            ),
+        ]
+
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
     name = models.CharField(max_length=255)
     quantity = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal())
@@ -129,16 +125,16 @@ class Ingredient(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if float(self.quantity) < 0:
-            self.quantity = Decimal('-' + str(self.quantity))
+        # Round quantity to 2 d.p. and ensure within range (0, 99999999.99)
+        self.quantity = min(max(self.quantity, Decimal()).quantize(Decimal('.01')), Decimal(9999999.99)).quantize(Decimal('.01'))
 
         super().save(*args, **kwargs)
 
     def get_unit_name(self):
-        return Unit.units[self.unit][Unit.NAME_KEY]
+        return Ingredient.Unit.units[self.unit][Ingredient.Unit.NAME_KEY]
 
     def get_unit_symbol(self):
-        return Unit.units[self.unit][Unit.SYMBOL_KEY]
+        return Ingredient.Unit.units[self.unit][Ingredient.Unit.SYMBOL_KEY]
 
 class Instruction(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='instructions')

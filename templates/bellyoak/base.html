@@ -7,10 +7,10 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title>
-    BellyOak -
     {% block title %}
     The home away from home of student grub
     {% endblock %}
+    | Bellyoak
   </title>
 </head>
 
@@ -19,10 +19,10 @@
   {% endblock %}
   <hr>
   <a href="{% url 'index' %}">Home</a>
-  <a href="{% url 'add_recipe' %}">New recipe</a>
-  <a href="{% url 'list_recipes' %}">Recipes</a>
-  <a href="{% url 'list_users' %}">Users</a>
-  <a href="{% url 'about' %}">About BellyOak</a>
+  <a href="{% url 'recipe_add' %}">New recipe</a>
+  <a href="{% url 'recipes_list' %}">Recipes</a>
+  <a href="{% url 'users_list' %}">Users</a>
+  <a href="{% url 'about' %}">About</a>
 </body>
 
 </html>

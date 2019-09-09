@@ -1,7 +1,9 @@
+from django.forms import modelformset_factory
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
-from bellyoak.models import Diet, Ingredient, Instruction, Recipe, Unit
+from bellyoak.forms import IngredientForm, IngredientFormSet, InstructionForm, InstructionFormSet, RecipeForm
+from bellyoak.models import Ingredient, Instruction, Recipe
 
 
 # TODO
@@ -11,66 +13,89 @@ from bellyoak.models import Diet, Ingredient, Instruction, Recipe, Unit
 # Views
 
 def index(request):
-    context_dict = {
-        'no_diet': Diet.NONE,
-        'no_unit': Unit.NONE,
+    context = {
         'recipes': Recipe.objects.order_by('-likes')[:5],
     }
-    return render(request, 'bellyoak/index.html', context_dict)
+    return render(request, 'bellyoak/index.html', context)
 
 def about(request):
-    context_dict = {}
-    return render(request, 'bellyoak/about.html', context_dict)
+    context = {}
+    return render(request, 'bellyoak/about.html', context)
 
-def add_recipe(request):
-    context_dict = {
-        'title': "New recipe",
-        'message': "add_recipe",
+def recipe_add(request):
+    recipe = Recipe(title='Untitled recipe')
+    recipe.save()
+    return redirect('recipe_edit', recipe.id)
+
+def recipe_edit(request, id):
+    try:
+        # Find recipe with specified id
+        recipe = Recipe.objects.get(id=id)
+    except Recipe.DoesNotExist:
+        # Render error page if no recipe with specified id
+        return render(request, 'bellyoak/recipe_none.html', {})
+
+    if request.method == 'POST':
+        # Retrieve form data
+        recipe_form = RecipeForm(request.POST, instance=recipe, prefix='recipe')
+        ingredient_formset = IngredientFormSet(request.POST, queryset=Ingredient.objects.filter(recipe=recipe), prefix='ingredient')
+        instruction_formset = InstructionFormSet(request.POST, queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
+        if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
+            recipe = recipe_form.save(commit=True)
+            # Save each ingredient with recipe foreign key
+            ingredients = ingredient_formset.save(commit=False)
+            for ingredient in ingredients:
+                ingredient.recipe = recipe
+                ingredient.save()
+            # Save each instruction with recipe foreign key
+            instructions = instruction_formset.save(commit=False)
+            for instruction in instructions:
+                instruction.recipe = recipe
+                instruction.save()
+        else:
+            print("recipe " + str(recipe_form.errors))
+            print("ingredients " + str(ingredient_formset.errors))
+            print("instructions " + str(instruction_formset.errors))
+    else:
+        recipe_form = RecipeForm(instance=recipe, prefix='recipe')
+        ingredient_formset = IngredientFormSet(queryset=Ingredient.objects.filter(recipe=recipe), prefix='ingredient')
+        instruction_formset = InstructionFormSet(queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
+
+    # If valid GET or invalid POST
+    # Render populated form or form with errors
+    context = {
+        'recipe': recipe,
+        'recipe_form': recipe_form,
+        'ingredient_formset': ingredient_formset,
+        'instruction_formset': instruction_formset,
     }
-    return render(request, 'bellyoak/recipe.html', context_dict)
+    return render(request, 'bellyoak/recipe_edit.html', context)
 
-def edit_recipe(request, id):
-    context_dict = {
-        'title': "Editing " + str(id),
-        'message': "edit_recipe",
-    }
-    return render(request, 'bellyoak/recipe.html', context_dict)
+def recipe_show(request, id):
+    try:
+        # Find recipe with specified id
+        recipe = Recipe.objects.get(id=id)
 
-def list_recipes(request):
-    context_dict = {
-        'no_diet': Diet.NONE,
-        'no_unit': Unit.NONE,
+        context = {
+            'recipe': recipe,
+            'ingredients': Ingredient.objects.filter(recipe=recipe).order_by('id'),
+            'instructions': Instruction.objects.filter(recipe=recipe).order_by('id'),
+        }
+        return render(request, 'bellyoak/recipe_show.html', context)
+    except Recipe.DoesNotExist:
+        # Render error page if no recipe with specified id
+        return render(request, 'bellyoak/recipe_none.html', {})
+
+def recipes_list(request):
+    context = {
         'recipes': Recipe.objects.all(),
     }
-    return render(request, 'bellyoak/recipes.html', context_dict)
+    return render(request, 'bellyoak/recipes_list.html', context)
 
-def list_users(request):
-    context_dict = {
-        'message': "list_users",
-    }
-    return render(request, 'bellyoak/users.html', context_dict)
+def user_show(request, username):
+    context = {}
+    return render(request, 'bellyoak/user_show.html', context)
 
-def show_recipe(request, id):
-    context_dict = {
-        'no_diet': Diet.NONE,
-        'no_unit': Unit.NONE,
-    }
-
-    try:
-        recipe = Recipe.objects.get(id=id)
-        context_dict['recipe'] = recipe
-        context_dict['ingredients'] = Ingredient.objects.filter(recipe=recipe).order_by('id')
-        context_dict['instructions'] = Instruction.objects.filter(recipe=recipe).order_by('id')
-    except Recipe.DoesNotExist:
-        context_dict['recipe'] = None
-        context_dict['ingredients'] = None
-        context_dict['instructions'] = None
-
-    return render(request, 'bellyoak/recipe.html', context_dict)
-
-def show_user(request, username):
-    context_dict = {
-        'title': username,
-        'message': "show_user",
-    }
-    return render(request, 'bellyoak/user.html', context_dict)
+def users_list(request):
+    context = {}
+    return render(request, 'bellyoak/users_list.html', context)
