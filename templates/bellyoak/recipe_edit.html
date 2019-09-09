@@ -1,0 +1,87 @@
+{% extends 'bellyoak/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}
+Editing {{ recipe.title }}
+{% endblock %}
+
+{% block body %}
+<style>
+  input[type="checkbox"][id$="DELETE"],
+  label[for$="DELETE"] {
+    display: none;
+  }
+
+</style>
+
+<h1>Edit your recipe</h1>
+<form method="POST" action=".">
+  {% csrf_token %}
+  {% for field in recipe_form.hidden_fields %}
+  {{ field }}
+  {% endfor %}
+  {% for field in recipe_form.visible_fields %}
+  <p>
+    {{ field.label_tag }}<br>
+    {{ field }}<br>
+    {{ field.help_text }}
+  </p>
+  {% endfor %}
+
+  <h2>Ingredients</h2>
+  {{ ingredient_formset.management_form }}
+  <ul>
+    {% for form in ingredient_formset %}
+    <li>
+      {% for field in form.hidden_fields %}
+      {{ field }}
+      {% endfor %}
+      {% for field in form.visible_fields %}
+      {{ field.label_tag }}
+      {{ field }}
+      {% for error in field.errors %}
+      {{ error }}
+      {% endfor %}
+      {% endfor %}
+      {% if forloop.last %}
+      <button type="button">Add</button>
+      {% else %}
+      <button type="button">Remove</button>
+      {% endif %}
+    </li>
+    {% for error in form.non_field_errors %}
+    {{ error }}
+    {% endfor %}
+    {% endfor %}
+  </ul>
+
+  <h2>Instructions</h2>
+  {{ instruction_formset.management_form }}
+  <ol>
+    {% for form in instruction_formset %}
+    <li>
+      {% for field in form.hidden_fields %}
+      {{ field }}
+      {% endfor %}
+      {% for field in form.visible_fields %}
+      {{ field }}
+      {% for error in field.errors %}
+      {{ error }}
+      {% endfor %}
+      {% endfor %}
+      {% if forloop.last %}
+      <button type="button">Add</button>
+      {% else %}
+      <button type="button">Remove</button>
+      {% endif %}
+    </li>
+    {% for error in form.non_field_errors %}
+    {{ error }}
+    {% endfor %}
+    {% endfor %}
+  </ol>
+
+  <input type="submit" name="submit" value="Save">
+</form>
+{% endblock %}

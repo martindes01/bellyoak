@@ -3,22 +3,18 @@
 {% load staticfiles %}
 
 {% block title %}
-Home
+Recipes
 {% endblock %}
 
 {% block body %}
-<h1>Welcome to BellyOak</h1>
-<p>The home away from home of student grub</p>
-
-<h2>Popular recipes</h2>
+<h1>Recipes</h1>
 <div>
   <ul>
-    <!-- Following for clause repeated in recipes_list.html -->
+    <!-- Following for clause repeated in index.html -->
     <!-- Keep it DRY -->
     {% for recipe in recipes %}
     <li>
-      <a href="{% url 'recipe_show' recipe.id %}">{{ recipe.title }}</a>
-      <!-- Following statements repeated in recipe_show.html and recipes_list.html -->
+      <!-- Following statements repeated in index.html and recipe_show.html -->
       <!-- Keep it DRY -->
       {% with word_count=recipe.title|truncatechars:64|wordcount %}
       {% if recipe.title|truncatewords:word_count|length > 80 %}

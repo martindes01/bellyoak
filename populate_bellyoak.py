@@ -4,7 +4,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bellyoak_project.settings')
 import django
 django.setup()
 
-from bellyoak.models import Diet, Ingredient, Instruction, Recipe, Unit
+from bellyoak.models import Ingredient, Instruction, Recipe
 
 from decimal import Decimal
 
@@ -37,12 +37,12 @@ def populate():
         {
             NAME: 'Dehydrated haggis',
             QUANTITY: 123.45,
-            UNIT: Unit.KILOGRAM,
+            UNIT: Ingredient.Unit.KILOGRAM,
         },
         {
             NAME: 'Water',
             QUANTITY: 9000,
-            UNIT: Unit.LITRE,
+            UNIT: Ingredient.Unit.LITRE,
         },
     ]
     haggis_instructions = [
@@ -61,12 +61,12 @@ def populate():
         {
             NAME: 'Solid fat',
             QUANTITY: 3000000,
-            UNIT: Unit.KILOGRAM,
+            UNIT: Ingredient.Unit.KILOGRAM,
         },
         {
             NAME: 'Crude oil',
             QUANTITY: 1200,
-            UNIT: Unit.PINT,
+            UNIT: Ingredient.Unit.PINT,
         },
     ]
     mars_instructions = [
@@ -85,17 +85,17 @@ def populate():
         {
             NAME: 'Nitrogen',
             QUANTITY: 79,
-            UNIT: Unit.TEASPOON,
+            UNIT: Ingredient.Unit.TEASPOON,
         },
         {
             NAME: 'Oxygen',
             QUANTITY: 21,
-            UNIT: Unit.TEASPOON,
+            UNIT: Ingredient.Unit.TEASPOON,
         },
         {
             NAME: 'Grave',
             QUANTITY: 5000,
-            UNIT: Unit.NONE,
+            UNIT: Ingredient.Unit.NONE,
         },
     ]
     nothing_instructions = [
@@ -116,7 +116,7 @@ def populate():
             TITLE: 'Yummy haggis',
             DESCRIPTION: 'My old dying relative used to make this for me all the time...',
             SERVINGS: 6,
-            DIET: Diet.NONE,
+            DIET: Recipe.Diet.NONE,
             LIKES: 32,
             VIEWS: 64,
             INGREDIENTS: haggis_ingredients,
@@ -126,7 +126,7 @@ def populate():
             TITLE: 'Glasgow\'s finest fried mars bars!',
             DESCRIPTION: 'Feel the fat flow through your veins... ooh yass',
             SERVINGS: 300,
-            DIET: Diet.VEGETARIAN,
+            DIET: Recipe.Diet.VEGETARIAN,
             LIKES: 128,
             VIEWS: 128,
             INGREDIENTS: mars_ingredients,
@@ -136,7 +136,7 @@ def populate():
             TITLE: 'F##k all',
             DESCRIPTION: 'Starve to death due to your own incompetence, init',
             SERVINGS: 5000,
-            DIET: Diet.VEGAN,
+            DIET: Recipe.Diet.VEGAN,
             LIKES: 1,
             VIEWS: 1024,
             INGREDIENTS: nothing_ingredients,
@@ -168,7 +168,7 @@ def populate():
             print("  - {0}. {1}".format(index, instruction.text))
 
 # Add ingredient to database
-def add_ingredient(recipe, name, quantity=0, unit=Unit.NONE):
+def add_ingredient(recipe, name, quantity=0, unit=Ingredient.Unit.NONE):
     ingredient = Ingredient.objects.get_or_create(recipe=recipe, name=name)[0]
     ingredient.quantity = Decimal(quantity)
     ingredient.unit = unit
@@ -182,7 +182,7 @@ def add_instruction(recipe, text):
     return instruction
 
 # Add recipe to database
-def add_recipe(title, description, servings=1, diet=Diet.NONE, likes=0, views=0):
+def add_recipe(title, description, servings=1, diet=Recipe.Diet.NONE, likes=0, views=0):
     recipe = Recipe.objects.get_or_create(title=title)[0]
     recipe.description = description
     recipe.servings = servings
