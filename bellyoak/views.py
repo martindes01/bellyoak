@@ -42,27 +42,34 @@ def recipe_edit(request, id):
         instruction_formset = InstructionFormSet(request.POST, queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
         if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
             recipe = recipe_form.save(commit=True)
-            # Save each ingredient with recipe foreign key
+            # Save ingredient formset but do not commit
             ingredients = ingredient_formset.save(commit=False)
+            # Save each ingredient with recipe foreign key
             for ingredient in ingredients:
                 ingredient.recipe = recipe
                 ingredient.save()
-            # Save each instruction with recipe foreign key
+            # Delete marked ingredients
+            for obj in ingredient_formset.deleted_objects:
+                obj.delete()
+            # Save instruction formset but do not commit
             instructions = instruction_formset.save(commit=False)
+            # Save each instruction with recipe foreign key
             for instruction in instructions:
                 instruction.recipe = recipe
                 instruction.save()
+            # Delete marked instructions
+            for obj in instruction_formset.deleted_objects:
+                obj.delete()
         else:
             print("recipe " + str(recipe_form.errors))
             print("ingredients " + str(ingredient_formset.errors))
             print("instructions " + str(instruction_formset.errors))
-    else:
-        recipe_form = RecipeForm(instance=recipe, prefix='recipe')
-        ingredient_formset = IngredientFormSet(queryset=Ingredient.objects.filter(recipe=recipe), prefix='ingredient')
-        instruction_formset = InstructionFormSet(queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
 
     # If valid GET or invalid POST
     # Render populated form or form with errors
+    recipe_form = RecipeForm(instance=recipe, prefix='recipe')
+    ingredient_formset = IngredientFormSet(queryset=Ingredient.objects.filter(recipe=recipe), prefix='ingredient')
+    instruction_formset = InstructionFormSet(queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
     context = {
         'recipe': recipe,
         'recipe_form': recipe_form,
