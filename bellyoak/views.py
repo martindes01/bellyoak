@@ -1,4 +1,3 @@
-from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -42,6 +41,7 @@ def recipe_edit(request, id):
         instruction_formset = InstructionFormSet(request.POST, queryset=Instruction.objects.filter(recipe=recipe), prefix='instruction')
         if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
             recipe = recipe_form.save(commit=True)
+
             # Save ingredient formset but do not commit
             ingredients = ingredient_formset.save(commit=False)
             # Save each ingredient with recipe foreign key
@@ -51,6 +51,7 @@ def recipe_edit(request, id):
             # Delete marked ingredients
             for obj in ingredient_formset.deleted_objects:
                 obj.delete()
+
             # Save instruction formset but do not commit
             instructions = instruction_formset.save(commit=False)
             # Save each instruction with recipe foreign key
@@ -60,6 +61,9 @@ def recipe_edit(request, id):
             # Delete marked instructions
             for obj in instruction_formset.deleted_objects:
                 obj.delete()
+
+            # Redirect to show recipe
+            return redirect('recipe_show', recipe.id)
         else:
             print("recipe " + str(recipe_form.errors))
             print("ingredients " + str(ingredient_formset.errors))

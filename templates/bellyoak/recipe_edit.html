@@ -23,9 +23,9 @@ Editing {{ recipe.title }}
 
   <h2>Ingredients</h2>
   {{ ingredient_formset.management_form }}
-  <ul>
+  <ul class="dfs-formset-info" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-last-form-optional>
     {% for form in ingredient_formset %}
-    <li>
+    <li class="dfs-form" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}">
       {% for field in form.hidden_fields %}
       {{ field }}
       {% endfor %}
@@ -36,23 +36,20 @@ Editing {{ recipe.title }}
       {{ error }}
       {% endfor %}
       {% endfor %}
-      {% if forloop.last %}
-      <button type="button">Add</button>
-      {% else %}
-      <button type="button">Remove</button>
-      {% endif %}
+      <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-action-remove>Remove</button>
     </li>
     {% for error in form.non_field_errors %}
     {{ error }}
     {% endfor %}
     {% endfor %}
+    <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-action-add>Add</button>
   </ul>
 
   <h2>Instructions</h2>
   {{ instruction_formset.management_form }}
-  <ol>
+  <ol class="dfs-formset-info" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-last-form-optional>
     {% for form in instruction_formset %}
-    <li>
+    <li class="dfs-form" data-dfs-formset-prefix="{{ instruction_formset.prefix }}">
       {% for field in form.hidden_fields %}
       {{ field }}
       {% endfor %}
@@ -62,16 +59,13 @@ Editing {{ recipe.title }}
       {{ error }}
       {% endfor %}
       {% endfor %}
-      {% if forloop.last %}
-      <button type="button">Add</button>
-      {% else %}
-      <button type="button">Remove</button>
-      {% endif %}
+      <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-action-remove>Remove</button>
     </li>
     {% for error in form.non_field_errors %}
     {{ error }}
     {% endfor %}
     {% endfor %}
+    <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-action-add>Add</button>
   </ol>
 
   <input type="submit" name="submit" value="Save">

@@ -1,0 +1,4 @@
+/* Hide all Django form deletion checkboxes */
+input[type="checkbox"][id^="id_"][id$="-DELETE"], label[for^="id_"][for$="-DELETE"] {
+  display: none;
+}
