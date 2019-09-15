@@ -69,6 +69,6 @@ class RecipeForm(forms.ModelForm):
 
 # Model formsets
 
-IngredientFormSet = forms.modelformset_factory(Ingredient, form=IngredientForm, can_delete=True)
+IngredientFormSet = forms.modelformset_factory(Ingredient, form=IngredientForm, can_delete=True, min_num=2)
 
-InstructionFormSet = forms.modelformset_factory(Instruction, form=InstructionForm, can_delete=True)
+InstructionFormSet = forms.modelformset_factory(Instruction, form=InstructionForm, can_delete=True, min_num=1)
