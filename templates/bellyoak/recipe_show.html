@@ -1,6 +1,7 @@
 {% extends 'bellyoak/base.html' %}
 
-{% load staticfiles %}
+{% load bellyoak_extras %}
+{% load humanize %}
 
 {% block title %}
 {{ recipe.title }}
@@ -9,13 +10,7 @@
 {% block body %}
 <h1>{{ recipe.title }}</h1>
 <div>
-  <!-- Following statements repeated in index.html and recipes_list.html -->
-  <!-- Keep it DRY -->
-  ({{ recipe.views }} view{{ recipe.views|pluralize }})
-  ({{ recipe.likes }} like{{ recipe.likes|pluralize }})
-  {% if recipe.diet != recipe.Diet.NONE %}
-  ({{ recipe.get_diet_display }})
-  {% endif %}
+  {% recipe_info recipe %}
   <p>{{ recipe.description|linebreaks|urlize }}</p>
 </div>
 
@@ -24,7 +19,7 @@
   <ul>
     {% for ingredient in ingredients %}
     <li>
-      {{ ingredient.name }}, {{ ingredient.quantity|floatformat:-2 }}
+      {{ ingredient.name }}, {{ ingredient.quantity|floatformat:-2|intcomma }}
       {% if ingredient.unit != ingredient.Unit.NONE %}
       <abbr title="{{ ingredient.get_unit_name }}">{{ ingredient.get_unit_symbol }}</abbr>
       {% endif %}

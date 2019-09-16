@@ -1,6 +1,6 @@
 {% extends 'bellyoak/base.html' %}
 
-{% load staticfiles %}
+{% load bellyoak_extras %}
 
 {% block title %}
 Home
@@ -12,42 +12,6 @@ Home
 
 <h2>Popular recipes</h2>
 <div>
-  <ul>
-    <!-- Following for clause repeated in recipes_list.html -->
-    <!-- Keep it DRY -->
-    {% for recipe in recipes %}
-    <li>
-      <a href="{% url 'recipe_show' recipe.id %}">{{ recipe.title }}</a>
-      <!-- Following statements repeated in recipe_show.html and recipes_list.html -->
-      <!-- Keep it DRY -->
-      {% with word_count=recipe.title|truncatechars:64|wordcount %}
-      {% if recipe.title|truncatewords:word_count|length > 80 %}
-      <a href="{% url 'recipe_show' recipe.id %}">{{ recipe.title|truncatechars:80 }}</a>
-      {% else %}
-      <a href="{% url 'recipe_show' recipe.id %}">{{ recipe.title|truncatewords:word_count }}</a>
-      {% endif %}
-      {% endwith %}
-      ({{ recipe.views }} view{{ recipe.views|pluralize }})
-      ({{ recipe.likes }} like{{ recipe.likes|pluralize }})
-      {% if recipe.diet != recipe.Diet.NONE %}
-      ({{ recipe.get_diet_display }})
-      {% endif %}
-      {% with word_count=recipe.description|truncatechars:128|wordcount %}
-      {% if recipe.title|truncatewords:word_count|length > 144 %}
-      <p>{{ recipe.description|truncatechars:128 }}</p>
-      {% else %}
-      <p>{{ recipe.description|truncatewords:word_count }}</p>
-      {% endif %}
-      {% endwith %}
-    </li>
-    {% empty %}
-    <p>
-      We currently have no recipes listed. Why not
-      <span>
-        <a href="{% url 'recipe_add' %}">add one of your own</a>?
-      </span>
-    </p>
-    {% endfor %}
-  </ul>
+  {% recipes_list recipes %}
 </div>
 {% endblock %}
