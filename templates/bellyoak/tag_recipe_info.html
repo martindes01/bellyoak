@@ -1,0 +1,7 @@
+{% load humanize %}
+
+({{ recipe.views|intcomma }} view{{ recipe.views|pluralize }})
+({{ recipe.likes|intcomma }} like{{ recipe.likes|pluralize }})
+{% if recipe.diet != recipe.Diet.NONE %}
+({{ recipe.get_diet_display }})
+{% endif %}

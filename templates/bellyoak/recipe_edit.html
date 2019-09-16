@@ -1,7 +1,5 @@
 {% extends 'bellyoak/base_forms.html' %}
 
-{% load staticfiles %}
-
 {% block title %}
 Editing {{ recipe.title }}
 {% endblock %}
@@ -23,7 +21,7 @@ Editing {{ recipe.title }}
 
   <h2>Ingredients</h2>
   {{ ingredient_formset.management_form }}
-  <ul class="dfs-formset-info" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-last-form-optional>
+  <ul class="dfs-formset-info" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-last-form-optional data-dfs-remove-last-form>
     {% for form in ingredient_formset %}
     <li class="dfs-form" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}">
       {% for field in form.hidden_fields %}
@@ -47,7 +45,7 @@ Editing {{ recipe.title }}
 
   <h2>Instructions</h2>
   {{ instruction_formset.management_form }}
-  <ol class="dfs-formset-info" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-last-form-optional>
+  <ol class="dfs-formset-info" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-last-form-optional data-dfs-remove-last-form>
     {% for form in instruction_formset %}
     <li class="dfs-form" data-dfs-formset-prefix="{{ instruction_formset.prefix }}">
       {% for field in form.hidden_fields %}
