@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bellyoak',
     'django.contrib.humanize',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,26 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_DIR
 
 MEDIA_URL = '/media/'
+
+
+# Registration (django-registration-redux)
+
+# Allow registration of new accounts (default True)
+REGISTRATION_OPEN = True
+
+# Allow automatic login after account activation (default False)
+REGISTRATION_AUTO_LOGIN = True
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/account/login/'
+
+# Default backend
+
+# Activation period after which account will remain permanently inactive
+# Account may be deleted by provided maintenance scripts
+ACCOUNT_ACTIVATION_DAYS = 7
+
+# Simple backend
+
+# See registration.backends.simple.views (default '/' with root 'account/register/')
+SIMPLE_BACKEND_REDIRECT_URL = '../profile/edit/'

@@ -9,10 +9,8 @@
   </li>
   {% empty %}
   <p>
-    We currently have no recipes listed. Why not
-    <span>
-      <a href="{% url 'recipe_add' %}">add one of your own</a>?
-    </span>
+    We currently have no recipes listed.
+    Why not <a href="{% url 'recipe_add' %}">add one of your own</a>?
   </p>
   {% endfor %}
 </ul>

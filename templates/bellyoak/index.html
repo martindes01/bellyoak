@@ -7,7 +7,7 @@ Home
 {% endblock %}
 
 {% block body %}
-<h1>Welcome to BellyOak</h1>
+<h1>Welcome to BellyOak{% if user.is_authenticated %}, {{ user.username }}{% endif %}</h1>
 <p>The home away from home of student grub</p>
 
 <h2>Popular recipes</h2>

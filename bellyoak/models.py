@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -7,6 +8,8 @@ from decimal import Decimal
 # Research integer and decimal validation
 # Add length, more units, imperial
 # Add course, cuisine, publish/update dates, tags
+# Choose upload_to locations and filenames
+# Overwrite uploaded files
 
 class Recipe(models.Model):
     class Diet():
@@ -20,6 +23,7 @@ class Recipe(models.Model):
             (VEGAN, 'Vegan'),
         ]
 
+    # author = models.ManyToManyField(User)
     title = models.CharField(max_length=255)
     # image = models.ImageField(upload_to='recipe_images', blank=True)
     description = models.TextField(blank=True)
@@ -44,7 +48,7 @@ class Recipe(models.Model):
         if self.views < 0:
             self.views = 0
 
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.title[:63])
 
         super().save(*args, **kwargs)
 
@@ -116,7 +120,7 @@ class Ingredient(models.Model):
             ),
         ]
 
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients', related_query_name='ingredient')
     name = models.CharField(max_length=255)
     quantity = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal())
     unit = models.CharField(max_length=255, choices=Unit.UNIT_CHOICES, default=Unit.NONE)
@@ -125,8 +129,9 @@ class Ingredient(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        # Round quantity to 2 d.p. and ensure within range (0, 99999999.99)
-        self.quantity = min(max(self.quantity, Decimal()).quantize(Decimal('.01')), Decimal(9999999.99)).quantize(Decimal('.01'))
+        # Ensure quantity positive with max digits 9 and decimal places 2
+        parts = str(self.quantity).lstrip('-').partition('.')
+        self.quantity = Decimal(parts[0][-7:] + '.' + parts[2][:2].ljust(2, '0'))
 
         super().save(*args, **kwargs)
 
@@ -137,8 +142,18 @@ class Ingredient(models.Model):
         return Ingredient.Unit.units[self.unit][Ingredient.Unit.SYMBOL_KEY]
 
 class Instruction(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='instructions')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='instructions', related_query_name='instruction')
     text = models.TextField()
 
     def __str__(self):
         return self.text
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles', related_query_name='profile', primary_key=True)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+    status = models.CharField(max_length=255, blank=True)
+    website = models.URLField(blank=True)
+    about_me = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username
