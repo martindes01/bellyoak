@@ -1,0 +1,21 @@
+{% extends 'bellyoak/base.html' %}
+
+{% block title %}
+Recipe does not exist!
+{% endblock %}
+
+{% block body %}
+<h1>Oops!</h1>
+<p>
+  The recipe at <strong>{{ request.path_info }}</strong> does not exist.
+</p>
+<p>
+  If this page was working before, it may be that the recipe has since been deleted by its author.
+</p>
+<p>
+  Why not
+  <a href="{% url 'index' %}">return to the BellyOak homepage</a>
+  or
+  <a href="{% url 'recipe_add' %}">create a recipe of your own</a>?
+</p>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load bellyoak_extras %}
+
+<ul>
+  {% for recipe in recipes %}
+  <li>
+    <a href="{% url 'recipe_show' recipe.id %}">{{ recipe.title|tease:'64,80' }}</a>
+    {% recipe_info recipe %}
+    <p>{{ recipe.description|tease:'128,144' }}</p>
+  </li>
+  {% empty %}
+  <p>
+    We currently have no recipes listed.
+    Why not <a href="{% url 'recipe_add' %}">add one of your own</a>?
+  </p>
+  {% endfor %}
+</ul>

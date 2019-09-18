@@ -1,0 +1,14 @@
+{% extends 'bellyoak/base.html' %}
+
+{% load bellyoak_extras %}
+
+{% block title %}
+Recipes
+{% endblock %}
+
+{% block body %}
+<h1>Recipes</h1>
+<div>
+  {% recipes_list recipes %}
+</div>
+{% endblock %}

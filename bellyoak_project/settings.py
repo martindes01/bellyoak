@@ -14,6 +14,9 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bellyoak',
+    'django.contrib.humanize',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -55,11 +60,14 @@ ROOT_URLCONF = 'bellyoak_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATE_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                'django.template.context_processors.media',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -118,4 +126,38 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
 STATIC_URL = '/static/'
+
+
+# Media files
+
+MEDIA_ROOT = MEDIA_DIR
+
+MEDIA_URL = '/media/'
+
+
+# Registration (django-registration-redux)
+
+# Allow registration of new accounts (default True)
+REGISTRATION_OPEN = True
+
+# Allow automatic login after account activation (default False)
+REGISTRATION_AUTO_LOGIN = True
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/account/login/'
+
+# Default backend
+
+# Activation period after which account will remain permanently inactive
+# Account may be deleted by provided maintenance scripts
+ACCOUNT_ACTIVATION_DAYS = 7
+
+# Simple backend
+
+# See registration.backends.simple.views (default '/' with root 'account/register/')
+SIMPLE_BACKEND_REDIRECT_URL = '../profile/edit/'

@@ -1,0 +1,46 @@
+{% extends 'bellyoak/base.html' %}
+
+{% load bellyoak_extras %}
+{% load humanize %}
+
+{% block title %}
+{{ recipe.title }} (recipe)
+{% endblock %}
+
+{% block body %}
+<h1>{{ recipe.title }}</h1>
+<div>
+  {% recipe_info recipe %}
+  <p>{{ recipe.description|linebreaks|urlize }}</p>
+</div>
+
+<h2>Ingredients</h2>
+<div>
+  <ul>
+    {% for ingredient in ingredients %}
+    <li>
+      {{ ingredient.name }}, {{ ingredient.quantity|floatformat:-2|intcomma }}
+      {% if ingredient.unit != ingredient.Unit.NONE %}
+      <abbr title="{{ ingredient.get_unit_name }}">{{ ingredient.get_unit_symbol }}</abbr>
+      {% endif %}
+    </li>
+    {% empty %}
+    <p>This recipe does not have any ingredients!</p>
+    {% endfor %}
+  </ul>
+</div>
+
+<h2>Method</h2>
+<div>
+  <ol>
+    {% for instruction in instructions %}
+    <li>
+      <!-- {{ forloop.counter }}. {{ instruction.text }} -->
+      {{ instruction.text }}
+    </li>
+    {% empty %}
+    <p>This recipe does not have any instructions!</p>
+    {% endfor %}
+  </ol>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'bellyoak/base.html' %}
+
+{% block title %}
+{% if owner  %}
+Dashboard
+{% else %}
+{{ profile.user.username }} (user)
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<div>
+  {% if profile.picture %}
+  <img src="{{ MEDIA_URL }}{{ profile.picture }}" width="32" height="32" />
+  {% else %}
+  <!-- <img src="http://lorempixel.com/32/32/people/" width="32" height="32" /> -->
+  {% endif %}
+  <h1>{{ profile.user.username }}</h1>
+  {% if profile.status %}
+  is <strong>{{ profile.status }}</strong>
+  {% endif %}
+  {% if profile.website %}
+  <p>{{ profile.website|urlize }}</p>
+  {% endif %}
+  {% if profile.about_me %}
+  <p>{{ profile.about_me|linebreaks|urlize }}</p>
+  {% endif %}
+  {% if owner %}
+  <a href="{% url 'user_edit' %}">Edit profile</a>
+  <a href="{% url 'auth_password_change' %}">Change password</a>
+  {% endif %}
+</div>
+<h2>Recipes</h2>
+<div>
+  {% if owner %}
+  <a href="{% url 'recipe_add' %}">New recipe</a>
+  {% endif %}
+</div>
+{% endblock %}

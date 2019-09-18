@@ -1,0 +1,71 @@
+{% extends 'bellyoak/base_forms.html' %}
+
+{% block title %}
+Edit {{ recipe.title }} (recipe)
+{% endblock %}
+
+{% block body %}
+<h1>Edit your recipe</h1>
+<form method="POST" action=".">
+  {% csrf_token %}
+  {% for field in recipe_form.hidden_fields %}
+  {{ field }}
+  {% endfor %}
+  {% for field in recipe_form.visible_fields %}
+  <p>
+    {{ field.label_tag }}<br>
+    {{ field }}<br>
+    {{ field.help_text }}
+  </p>
+  {% endfor %}
+
+  <h2>Ingredients</h2>
+  {{ ingredient_formset.management_form }}
+  <ul class="dfs-formset-info" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-last-form-optional data-dfs-remove-last-form>
+    {% for form in ingredient_formset %}
+    <li class="dfs-form" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}">
+      {% for field in form.hidden_fields %}
+      {{ field }}
+      {% endfor %}
+      {% for field in form.visible_fields %}
+      {{ field.label_tag }}
+      {{ field }}
+      {% for error in field.errors %}
+      {{ error }}
+      {% endfor %}
+      {% endfor %}
+      <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-action-remove>Remove</button>
+    </li>
+    {% for error in form.non_field_errors %}
+    {{ error }}
+    {% endfor %}
+    {% endfor %}
+    <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ ingredient_formset.prefix }}" data-dfs-action-add>Add</button>
+  </ul>
+
+  <h2>Instructions</h2>
+  {{ instruction_formset.management_form }}
+  <ol class="dfs-formset-info" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-last-form-optional data-dfs-remove-last-form>
+    {% for form in instruction_formset %}
+    <li class="dfs-form" data-dfs-formset-prefix="{{ instruction_formset.prefix }}">
+      {% for field in form.hidden_fields %}
+      {{ field }}
+      {% endfor %}
+      {% for field in form.visible_fields %}
+      {{ field }}
+      {% for error in field.errors %}
+      {{ error }}
+      {% endfor %}
+      {% endfor %}
+      <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-action-remove>Remove</button>
+    </li>
+    {% for error in form.non_field_errors %}
+    {{ error }}
+    {% endfor %}
+    {% endfor %}
+    <button type="button" class="dfs-button" data-dfs-formset-prefix="{{ instruction_formset.prefix }}" data-dfs-action-add>Add</button>
+  </ol>
+
+  <input type="submit" name="submit" value="Save">
+</form>
+{% endblock %}
