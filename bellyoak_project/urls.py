@@ -21,4 +21,5 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('bellyoak.urls')),
     path('admin/', admin.site.urls),
+    path('account/', include('registration.backends.simple.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

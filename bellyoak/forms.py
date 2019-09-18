@@ -1,6 +1,6 @@
 from django import forms
 
-from bellyoak.models import Ingredient, Instruction, Recipe
+from bellyoak.models import Ingredient, Instruction, Recipe, UserProfile
 
 
 # Model forms
@@ -66,6 +66,18 @@ class RecipeForm(forms.ModelForm):
             'description': "(Optional) Let us know why you love this recipe, what goes well with it or even tell us a funny anecdote. But keep it short, we're starving!",
         }
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = (
+            'picture',
+            'status',
+            'website',
+            'about_me',
+        )
+        help_texts = {
+            'about_me': "(Optional) Tell others a bit about yourself.",
+        }
 
 # Model formsets
 

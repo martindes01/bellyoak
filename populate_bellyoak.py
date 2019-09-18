@@ -161,10 +161,10 @@ def populate():
         print("\n{0} - {1}".format(recipe.title, recipe.description))
         print("- Servings: {0}, Diet: {1}, Views: {2}, Likes: {3}".format(recipe.servings, recipe.diet, recipe.views, recipe.likes))
         print("- Ingredients:")
-        for ingredient in Ingredient.objects.filter(recipe=recipe):
+        for ingredient in recipe.ingredients.all():
             print("  - {0}, {1} {2}".format(ingredient.name, ingredient.quantity, ingredient.get_unit_display()))
         print("- Instructions:")
-        for (index, instruction) in enumerate(Instruction.objects.filter(recipe=recipe), start=1):
+        for (index, instruction) in enumerate(recipe.instructions.all(), start=1):
             print("  - {0}. {1}".format(index, instruction.text))
 
 # Add ingredient to database

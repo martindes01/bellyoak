@@ -1,0 +1,21 @@
+{% extends 'bellyoak/base.html' %}
+
+{% block title %}
+User does not exist!
+{% endblock %}
+
+{% block body %}
+<h1>Oops!</h1>
+<p>
+  The username <strong>{{ username }}</strong> cannot be found.
+</p>
+<p>
+  If this page was working before, it may be that the account has since been deleted by its owner.
+</p>
+<p>
+  Why not
+  <a href="{% url 'index' %}">return to the BellyOak homepage</a>
+  or
+  <a href="{% url 'recipe_add' %}">browse the user list</a>?
+</p>
+{% endblock %}

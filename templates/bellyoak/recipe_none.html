@@ -7,7 +7,7 @@ Recipe does not exist!
 {% block body %}
 <h1>Oops!</h1>
 <p>
-  The recipe at {{ request.path_info }} does not exist.
+  The recipe at <strong>{{ request.path_info }}</strong> does not exist.
 </p>
 <p>
   If this page was working before, it may be that the recipe has since been deleted by its author.

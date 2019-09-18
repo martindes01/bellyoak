@@ -1,0 +1,14 @@
+{% extends 'bellyoak/base.html' %}
+
+{% block title_block %}
+Register
+{% endblock %}
+
+{% block body %}
+<h1>Register for BellyOak</h1>
+<form method="POST" action=".">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Register">
+</form>
+{% endblock %}

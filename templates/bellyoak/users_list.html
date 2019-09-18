@@ -5,4 +5,27 @@ Users
 {% endblock %}
 
 {% block body %}
+<h1>Users</h1>
+<div>
+  <ul>
+    {% for profile in profiles %}
+    <li>
+      {% if profile.picture %}
+      <img src="{{ MEDIA_URL }}{{ profile.picture }}" width="32" height="32" />
+      {% else %}
+      <!-- <img src="http://lorempixel.com/32/32/people/" width="32" height="32" /> -->
+      {% endif %}
+      <a href="{% url 'user_show' profile.user.username %}">{{ profile.user.username }}</a>
+      {% if profile.status %}
+      is <strong>{{ profile.status }}</strong>
+      {% endif %}
+    </li>
+    {% empty %}
+    <p>
+      We currently have no users registered.
+      Why not <a href="{% url 'registration_register' %}">register</a> yourself?
+    </p>
+    {% endfor %}
+</ul>
+</div>
 {% endblock %}

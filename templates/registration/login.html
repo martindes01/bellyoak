@@ -1,0 +1,23 @@
+{% extends 'bellyoak/base.html' %}
+
+{% block title %}
+Log in
+{% endblock %}
+
+{% block body %}
+<h1>Log in to BellyOak</h1>
+<form method="POST" action=".">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Log in">
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+<p>
+  Forgot your password?
+  <a href="{% url 'auth_password_reset' %}">Reset it</a>.
+</p>
+<p>
+  Not a member?
+  <a href="{% url 'registration_register' %}">Register</a>.
+</p>
+{% endblock %}

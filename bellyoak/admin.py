@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from bellyoak.models import Ingredient, Instruction, Recipe
+from bellyoak.models import Ingredient, Instruction, Recipe, UserProfile
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
@@ -33,3 +33,12 @@ class RecipeAdmin(admin.ModelAdmin):
             'title',
         ),
     }
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'status',
+        'website',
+        'about_me',
+    )
